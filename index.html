@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Series Audiovisuales · Portafolio — Alexander Oliva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Archivo:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="portafolio.css" />
+</head>
+<body class="no-scroll">
+
+  <!-- textures -->
+  <div class="grain"></div>
+  <div class="vignette"></div>
+  <div class="rail l" data-parallax="0.18"></div>
+  <div class="rail r" data-parallax="-0.18"></div>
+
+  <!-- cinematic wipe panel -->
+  <div id="wipe">
+    <div class="wipe-scan"></div>
+    <div class="wipe-corners"><b></b><b></b><b></b><b></b></div>
+    <div class="wipe-body">
+      <span class="wipe-no"></span>
+      <p class="wipe-title"></p>
+    </div>
+    <div class="wipe-mark">— Series Audiovisuales —</div>
+  </div>
+
+  <!-- ===================== INTRO ===================== -->
+  <section id="intro" aria-label="Introducción">
+
+    <!-- ── Film leader (se muestra antes de la animación principal) ── -->
+    <div id="fl" aria-hidden="true">
+      <div class="fl-rail fl-rail-l"></div>
+      <div class="fl-rail fl-rail-r"></div>
+      <div class="fl-tc">
+        <svg class="fl-ring-svg" viewBox="0 0 240 240" aria-hidden="true">
+          <circle class="fl-ring-bg" cx="120" cy="120" r="108"/>
+          <circle class="fl-ring-fill" cx="120" cy="120" r="108" id="flRing"/>
+          <line x1="120" y1="0" x2="120" y2="240" class="fl-cross"/>
+          <line x1="0" y1="120" x2="240" y2="120" class="fl-cross"/>
+        </svg>
+        <span class="fl-scan"></span>
+        <span class="fl-num" id="flNum">3</span>
+      </div>
+      <p class="fl-label">SERIES AUDIOVISUALES &ensp;·&ensp; S · 01 &ensp;·&ensp; 2026</p>
+    </div>
+
+    <div class="countdown" id="countdown"></div>
+    <div class="rec"><span class="dot"></span> REC · 00:00</div>
+    <div class="intro-inner">
+      <div class="present" id="present"></div>
+      <div class="pre" id="introPre">una serie de análisis por Alexander Oliva</div>
+      <h1 class="title">
+        <span class="l1" id="t1"></span>
+        <span class="l2" id="t2"></span>
+      </h1>
+      <div class="meta" id="introMeta">
+        <span>Universidad Anáhuac</span>
+        <span>Series Audiovisuales</span>
+        <span>Temporada 01</span>
+      </div>
+      <button class="enter" id="enterBtn">Entrar a la temporada <span class="arrow">→</span></button>
+    </div>
+    <button class="skip" id="skipBtn">Saltar intro ✕</button>
+  </section>
+
+  <!-- ===================== TOP BAR ===================== -->
+  <header class="topbar" id="topbar" aria-hidden="true">
+    <div class="tb-left">
+      <span class="rec"><span class="dot"></span> S01</span>
+      <a href="#season" class="nav-link" data-scroll>Episodios</a>
+    </div>
+    <a href="#top" class="word" data-scroll>Series Audiovisuales</a>
+    <div class="tb-right">
+      <a href="#about" class="nav-link" data-scroll>Autor</a>
+      <a href="#season" class="nav-link" data-scroll>Índice</a>
+    </div>
+  </header>
+
+  <!-- ===================== MAIN ===================== -->
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-glow" data-parallax="0.06"></div>
+      <div class="bignum" data-parallax="0.22">01</div>
+      <div class="wrap hero-content">
+        <p class="pre" data-hero="1">una serie de análisis por <em>Alexander Oliva</em></p>
+        <h1>
+          <span class="l1" data-hero="2">Series</span>
+          <span class="l2" data-hero="3">Audiovisuales</span>
+        </h1>
+        <p class="lede" data-hero="4">Un portafolio cinematográfico para la materia de <strong>Series Audiovisuales</strong>. Cada actividad del curso es un episodio: análisis, fragmentos y ensayos sobre el lenguaje de la ficción serial.</p>
+        <div class="hero-meta" data-hero="5">
+          <span>Universidad Anáhuac</span>
+          <span>Temporada 01 · 6 Episodios</span>
+          <span>2026</span>
+        </div>
+      </div>
+      <div class="scroll-cue"><span>Desplaza</span><span class="bar"></span></div>
+    </section>
+
+    <!-- SEASON / CAROUSEL -->
+    <section class="season" id="season">
+      <div class="wrap">
+        <div class="season-head">
+          <h2 class="sh-title" data-reveal>Temporada <em>uno</em></h2>
+          <p class="sh-desc" data-reveal>Seis episodios sobre cómo se piensa, se mira y se construye una serie. Haz clic en cualquier episodio para acceder a la actividad.</p>
+        </div>
+      </div>
+      <div class="carousel-viewport" id="viewport">
+        <div class="carousel-track" id="track"><!-- cards injected by app.js --></div>
+      </div>
+      <div class="wrap">
+        <div class="carousel-controls">
+          <div class="cc-progress" id="ccProgress"></div>
+          <div class="cc-arrows">
+            <button id="prevBtn" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button id="nextBtn" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+      <div class="wrap about-grid">
+        <h2 data-reveal>Ficha técnica</h2>
+        <div data-reveal>
+          <div class="credits-list" style="margin-top:26px">
+            <div class="row"><span class="role">Análisis & textos</span><span class="name">Alexander Oliva</span></div>
+            <div class="row"><span class="role">Materia</span><span class="name">Series Audiovisuales</span></div>
+            <div class="row"><span class="role">Institución</span><span class="name">Univ. Anáhuac</span></div>
+            <div class="row"><span class="role">Temporada</span><span class="name">01 · 2026</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="wrap">
+        <footer class="site-foot">
+          <span>Series Audiovisuales © 2026 — Alexander Oliva</span>
+          <a href="#top" class="top" data-scroll>Volver al inicio ↑</a>
+        </footer>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== EPISODE OVERLAY ===================== -->
+  <div class="episode-overlay" id="episode" hidden aria-hidden="true"><!-- injected --></div>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- App -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="scroll.js"></script>
+</body>
+</html>

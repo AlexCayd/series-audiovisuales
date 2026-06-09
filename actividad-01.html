@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- [EDITAR] Actualiza el número y título en <title> -->
+  <title>E01 · Anatomía del Piloto — Series Audiovisuales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Archivo:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="portafolio.css" />
+  <style>
+    body { overflow-x: hidden; }
+
+    .act-foot {
+      padding: 40px 0 60px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .act-foot a { color: var(--ink); transition: color .3s; }
+    .act-foot a:hover { color: var(--gold); }
+
+    [data-reveal]:nth-child(2) { transition-delay: 60ms; }
+    [data-reveal]:nth-child(3) { transition-delay: 120ms; }
+
+    /* ── Gallery mosaic ─────────────────────────────────────── */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 300px 230px;
+      gap: 10px;
+    }
+    .gallery .g-item {
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
+      aspect-ratio: unset;
+      background: var(--bg-3);
+    }
+    /* override portafolio.css first-child rule */
+    .gallery .g-item:first-child {
+      grid-column: 1 / 3;
+      grid-row: 1;
+      aspect-ratio: unset;
+    }
+    .gallery .g-item:nth-child(2) {
+      grid-column: 3;
+      grid-row: 1 / 3;
+    }
+    .gallery .g-item:nth-child(3) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .gallery .g-item:nth-child(4) {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .gallery .g-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .gallery .g-item:hover img { transform: scale(1.06); }
+
+    /* caption strip on hover */
+    .gallery .g-item::after {
+      content: attr(data-caption);
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 22px 14px 12px;
+      background: linear-gradient(transparent, rgba(7,6,5,0.88));
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.35s, transform 0.35s;
+      pointer-events: none;
+    }
+    .gallery .g-item:hover::after { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 760px) {
+      .gallery {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+      }
+      .gallery .g-item,
+      .gallery .g-item:first-child,
+      .gallery .g-item:nth-child(2),
+      .gallery .g-item:nth-child(3),
+      .gallery .g-item:nth-child(4) {
+        grid-column: auto;
+        grid-row: auto;
+        aspect-ratio: 4/3;
+      }
+      .gallery .g-item:first-child { grid-column: 1 / 3; aspect-ratio: 16/9; }
+    }
+
+    /* ── Lightbox ───────────────────────────────────────────── */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9500;
+      background: rgba(7,6,5,0.96);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 80px 40px 40px;
+    }
+    #lightbox[hidden] { display: none !important; }
+
+    #lb-close {
+      position: absolute;
+      top: 22px; right: 28px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--faint);
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.25s;
+      padding: 8px;
+    }
+    #lb-close:hover { color: var(--ink); }
+
+    #lb-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      max-width: 92vw;
+    }
+    #lb-img {
+      max-width: 80vw;
+      max-height: 72vh;
+      object-fit: contain;
+      display: block;
+      border: 1px solid rgba(243,236,221,0.10);
+    }
+    #lb-prev, #lb-next {
+      font-family: var(--disp);
+      font-weight: 700;
+      font-size: 28px;
+      color: var(--faint);
+      padding: 14px 10px;
+      flex-shrink: 0;
+      transition: color 0.25s, transform 0.25s;
+    }
+    #lb-prev:hover { color: var(--ink); transform: translateX(-4px); }
+    #lb-next:hover { color: var(--ink); transform: translateX(4px); }
+
+    #lb-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(80vw, 900px);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    #lb-counter { color: var(--gold); }
+  </style>
+</head>
+<body class="page-act">
+
+  <!-- ── Texturas ─────────────────────────────────────────── -->
+  <div class="grain"></div>
+  <div class="vignette"></div>
+  <div class="rail l"></div>
+  <div class="rail r"></div>
+
+  <!-- ── Barra superior ────────────────────────────────────── -->
+  <header class="ep-topbar">
+    <a href="index.html" class="ep-back">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M5 12l7-7M5 12l7 7"/></svg>
+      Todos los episodios
+    </a>
+    <!-- [EDITAR] Número del episodio -->
+    <span class="ep-id">E · 01</span>
+  </header>
+
+  <!-- ── Hero ──────────────────────────────────────────────── -->
+  <section class="ep-hero">
+    <div class="ep-hero-bg">
+      <img src="img/actividad-01/house-of-cards.webp" alt="House of Cards — fotograma del piloto" style="position:absolute;inset:-10% 0;width:100%;height:120%;object-fit:cover">
+    </div>
+    <div class="ep-hero-scrim"></div>
+    <!-- [EDITAR] Número de la marca de agua -->
+    <div class="ep-watermark">01</div>
+
+    <div class="wrap ep-hero-content">
+      <div class="ep-tags">
+        <!-- [EDITAR] Número, tipo, semana y tiempo de lectura -->
+        <span class="t gold">E · 01</span>
+      </div>
+      <!-- [EDITAR] Título de la actividad -->
+      <h1>Inicio de<br>las series</h1>
+      <!-- [EDITAR] Subtítulo / logline breve -->
+      <p class="ep-sub">Lo que un capítulo piloto promete</p>
+    </div>
+  </section>
+
+  <!-- ── Cuerpo ─────────────────────────────────────────────── -->
+  <div class="ep-body">
+    <div class="wrap">
+
+      <!-- SINOPSIS ─────────────────────────────────────────── -->
+      <div class="ep-section" data-reveal>
+        <p class="sec-label">Sinopsis</p>
+        <!--
+          [EDITAR] Una oración que resume el enfoque o tesis de la actividad.
+          Funciona como gancho; se lee grande, en serif itálico.
+        -->
+        <p class="synopsis">El piloto no solo presenta una historia, te hace promesas</p>
+      </div>
+
+      <!-- ANÁLISIS ─────────────────────────────────────────── -->
+      <div class="ep-section" data-reveal>
+        <p class="sec-label">El análisis</p>
+        <div class="analysis">
+          <!--
+            [EDITAR] Párrafo 1.
+            La primera letra del <span class="drop"> es la letra capital.
+            Cámbiala si el párrafo empieza con otra letra.
+          -->
+          <p>
+            <span class="drop">E</span>s interesante pensar en cómo tus series favoritos te engancharon a que te quedaras viendo. Sabiendo que seguramente el terminar el material te llevaría por lo menos algunas horas, el primer capítulo, y el inicio siendo más granulares, son tremendamente relevantes tanto para nosotros como espectadores como para los que están detrás del proyecto.
+          </p>
+          <!-- [EDITAR] Párrafo 2 -->
+          <p>
+            Un capítulo piloto sirve como punto de referencia que, mientras más disruptivo se presente a sí mismo, más puede llegar a tender la audiencia a experimentar lo que queda de material. Hoy en día, vivimos en una pelea constante de entre todos los proveedores de entretenimiento. Todos buscan una misma cosa: tu atención.
+          </p>
+          <p>
+            Por eso resulta tan importante que un primer episodio funcione. En primer lugar, probablemente para los productores que vendieron el proyecto a la compañía correspondiente, seguramente el piloto les funciona para tener esa conversación de elevador y que el financiamiento adecuado llegue al proyecto para ver la luz. 
+          </p>
+          <p>
+            En segunda instancia, podemos hablar de nuestra posición de espectadores. Seamos honestos, las personas que acaban series o ven series hoy en día son cada vez menos. Hay un tipo de contrato no escrito que haces con una serie una vez la empiezas. Y no quieres que te falle, tiene que ser interesante desde el segundo 0.
+          </p>
+          <p>
+            Ese primer vistazo presenta a los personajes, establece las reglas del juego, el ritmo de los diálogos y la atmósfera moral de su universo. En el caso de The West Wing y The Newsroom, se utilizan los primeros minutos para involucrarte rápidamente en un dinamismo de palabras e ideales. Este tipo de introducciones atrapan por el dinamismo intelectual y demuestran cómo un buen comienzo puede dar pie a la identidad de toda una obra cinematográfica, dejando claro qué tipo de historia se está a punto de presenciar.
+          </p>
+          <p>
+            En otro tipo de arranques como el de House of Cards o It's All Her Fault son más un tipo de golpes al estómago que incapacitan momentáneamente las expectativas del público. No se define un contexto gradualmente, se opta por romper la cuarta pared por sembrar misterio desde las primeras secuencias.
+          </p>
+          <p>
+          </p>
+          <!--
+            [EDITAR] Cita destacada.
+            Envuelve en <span> la palabra o frase que quieres resaltar en dorado.
+          -->
+          <p class="pullquote">
+            Un buen piloto no cuenta el final: te hace <span>necesitarlo</span>.
+          </p>
+        </div>
+      </div>
+
+      <!-- FRAGMENTOS / GALERÍA ─────────────────────────────── -->
+      <div class="ep-section" data-reveal>
+        <p class="sec-label">Fragmentos</p>
+        <div class="gallery">
+          <div class="g-item" data-caption="House of Cards — E01">
+            <img src="img/actividad-01/house-of-cards.webp" alt="House of Cards — piloto">
+          </div>
+          <div class="g-item" data-caption="The Newsroom — E01">
+            <img src="img/actividad-01/newsroom.jpg" alt="The Newsroom — piloto">
+          </div>
+          <div class="g-item" data-caption="The West Wing — E01">
+            <img src="img/actividad-01/the-west-wing.jpg" alt="The West Wing — piloto">
+          </div>
+          <div class="g-item" data-caption="All Her Fault — E01">
+            <img src="img/actividad-01/all%20her%20fault.jpg" alt="All Her Fault — piloto">
+          </div>
+        </div>
+      </div>
+
+      <!-- CONCLUSIÓN ───────────────────────────────────────── -->
+      <div class="ep-section" data-reveal>
+        <p class="sec-label">Conclusión</p>
+        <!-- [EDITAR] Párrafo de cierre de la actividad -->
+        <p style="color:var(--muted);font-size:17px;line-height:1.85;max-width:640px">
+            La relevancia de los inicios de las series, nuevamente, radica en su capacidad de atrapar la atención (mientras más irreversible, mejor) en una era de búsqueda de gratificación instantánea. Un comienzo poderoso es toda una declaración de intenciones que decide si nos quedaremos sentados por las próximas horas, o volveremos al scroll infinito. 
+        </p>
+      </div>
+
+      <!-- SIGUIENTE ACTIVIDAD ──────────────────────────────── -->
+      <!--
+        [EDITAR] Cambia href al nombre del archivo del siguiente episodio.
+        Si no hay siguiente, elimina este bloque completo.
+      -->
+      <a href="actividad-02.html" class="ep-next" data-reveal>
+        <div>
+          <p class="nx-label">Siguiente actividad</p>
+          <p class="nx-title">Lenguaje Cinematográfico y Televisivo</p>
+        </div>
+        <span class="nx-arrow">→</span>
+      </a>
+
+      <!-- PIE DE PÁGINA ────────────────────────────────────── -->
+      <footer class="act-foot">
+        <span>Series Audiovisuales © 2026 — Alexander Oliva</span>
+        <a href="index.html">← Volver al índice</a>
+      </footer>
+
+    </div><!-- /.wrap -->
+  </div><!-- /.ep-body -->
+
+  <!-- Lightbox -->
+  <div id="lightbox" hidden aria-hidden="true">
+    <button id="lb-close" aria-label="Cerrar">✕ &nbsp;cerrar</button>
+    <div id="lb-content">
+      <button id="lb-prev" aria-label="Anterior">←</button>
+      <img id="lb-img" src="" alt="">
+      <button id="lb-next" aria-label="Siguiente">→</button>
+    </div>
+    <footer id="lb-footer">
+      <span id="lb-caption"></span>
+      <span id="lb-counter"></span>
+    </footer>
+  </div>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <script>
+    /* ── Reveal on scroll (IntersectionObserver) ── */
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('[data-reveal]').forEach(el => obs.observe(el));
+
+    /* ── Lightbox ── */
+    const lb      = document.getElementById('lightbox');
+    const lbImg   = document.getElementById('lb-img');
+    const lbCap   = document.getElementById('lb-caption');
+    const lbCount = document.getElementById('lb-counter');
+    const lbPrev  = document.getElementById('lb-prev');
+    const lbNext  = document.getElementById('lb-next');
+
+    const lbItems = [];
+    let lbIdx = 0;
+
+    document.querySelectorAll('.g-item img').forEach((img, i) => {
+      lbItems.push({ src: img.src, alt: img.alt, caption: img.closest('.g-item').dataset.caption || '' });
+      img.closest('.g-item').addEventListener('click', () => openLightbox(i));
+    });
+
+    function syncUI() {
+      const item = lbItems[lbIdx];
+      lbImg.src      = item.src;
+      lbImg.alt      = item.alt;
+      lbCap.textContent   = item.caption;
+      lbCount.textContent = (lbIdx + 1) + ' / ' + lbItems.length;
+      lbPrev.style.opacity      = lbIdx === 0 ? '0.2' : '1';
+      lbNext.style.opacity      = lbIdx === lbItems.length - 1 ? '0.2' : '1';
+      lbPrev.style.pointerEvents = lbIdx === 0 ? 'none' : 'auto';
+      lbNext.style.pointerEvents = lbIdx === lbItems.length - 1 ? 'none' : 'auto';
+    }
+
+    function openLightbox(i) {
+      lbIdx = i;
+      syncUI();
+      lb.hidden = false;
+      lb.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      gsap.fromTo(lb,    { opacity: 0 },               { opacity: 1, duration: 0.3,  ease: 'power2.out' });
+      gsap.fromTo(lbImg, { scale: 0.88, opacity: 0 },  { scale: 1,   opacity: 1, duration: 0.5, ease: 'power3.out', delay: 0.05 });
+    }
+
+    function closeLightbox() {
+      gsap.to(lbImg, { scale: 0.9, opacity: 0, duration: 0.22, ease: 'power2.in' });
+      gsap.to(lb, {
+        opacity: 0, duration: 0.3, ease: 'power2.in', delay: 0.08,
+        onComplete() {
+          lb.hidden = true;
+          lb.setAttribute('aria-hidden', 'true');
+          lbImg.src = '';
+          document.body.style.overflow = '';
+        }
+      });
+    }
+
+    function navigate(dir) {
+      const next = lbIdx + dir;
+      if (next < 0 || next >= lbItems.length) return;
+      const fromX = dir > 0 ? -55 : 55;
+      const toX   = dir > 0 ?  55 : -55;
+      gsap.to(lbImg, {
+        x: fromX, opacity: 0, duration: 0.18, ease: 'power2.in',
+        onComplete() {
+          lbIdx = next;
+          syncUI();
+          gsap.fromTo(lbImg, { x: toX, opacity: 0 }, { x: 0, opacity: 1, duration: 0.28, ease: 'power2.out' });
+        }
+      });
+    }
+
+    document.getElementById('lb-close').addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', () => navigate(-1));
+    lbNext.addEventListener('click', () => navigate(1));
+    lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+      if (lb.hidden) return;
+      if (e.key === 'Escape')      closeLightbox();
+      if (e.key === 'ArrowLeft')   navigate(-1);
+      if (e.key === 'ArrowRight')  navigate(1);
+    });
+  </script>
+
+</body>
+</html>

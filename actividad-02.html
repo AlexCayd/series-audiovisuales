@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E02 · Lenguaje cinematográfico y televisivo — Series Audiovisuales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Archivo:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="portafolio.css" />
+  <style>
+    body { overflow-x: hidden; }
+
+    .act-foot {
+      padding: 40px 0 60px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .act-foot a { color: var(--ink); transition: color .3s; }
+    .act-foot a:hover { color: var(--gold); }
+
+    [data-reveal]:nth-child(2) { transition-delay: 60ms; }
+    [data-reveal]:nth-child(3) { transition-delay: 120ms; }
+
+    /* ── Series block: texto + imagen lado a lado ──────────── */
+    .series-block {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 48px;
+      align-items: start;
+    }
+    .series-block.reverse {
+      grid-template-columns: 320px 1fr;
+    }
+    .series-block.reverse .series-text { order: 2; }
+    .series-block.reverse .series-img  { order: 1; }
+
+    .series-img {
+      position: sticky;
+      top: 100px;
+    }
+    .series-img img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      display: block;
+      border: 1px solid var(--line-2);
+    }
+    .series-img figcaption {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-top: 10px;
+    }
+
+    @media (max-width: 820px) {
+      .series-block,
+      .series-block.reverse {
+        grid-template-columns: 1fr;
+      }
+      .series-block.reverse .series-text { order: 2; }
+      .series-block.reverse .series-img  { order: 1; }
+      .series-img { position: static; }
+      .series-img img { aspect-ratio: 16/9; }
+    }
+
+    /* ── Gallery mosaic (2 imágenes) ───────────────────────── */
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 380px;
+      gap: 10px;
+    }
+    .gallery .g-item {
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
+      aspect-ratio: unset;
+      background: var(--bg-3);
+    }
+    .gallery .g-item:first-child {
+      grid-column: 1;
+      grid-row: 1;
+      aspect-ratio: unset;
+    }
+    .gallery .g-item:nth-child(2) {
+      grid-column: 2;
+      grid-row: 1;
+      aspect-ratio: unset;
+    }
+    .gallery .g-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .gallery .g-item:hover img { transform: scale(1.06); }
+
+    .gallery .g-item::after {
+      content: attr(data-caption);
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 22px 14px 12px;
+      background: linear-gradient(transparent, rgba(7,6,5,0.88));
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.35s, transform 0.35s;
+      pointer-events: none;
+    }
+    .gallery .g-item:hover::after { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 600px) {
+      .gallery {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+      .gallery .g-item,
+      .gallery .g-item:first-child,
+      .gallery .g-item:nth-child(2) {
+        grid-column: auto;
+        grid-row: auto;
+        aspect-ratio: 16/9;
+      }
+    }
+
+    /* ── Fichas técnicas dobles ─────────────────────────────── */
+    .fichas-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .ficha-serie-title {
+      font-family: var(--disp);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    @media (max-width: 640px) {
+      .fichas-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Lightbox ───────────────────────────────────────────── */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9500;
+      background: rgba(7,6,5,0.96);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 80px 40px 40px;
+    }
+    #lightbox[hidden] { display: none !important; }
+
+    #lb-close {
+      position: absolute;
+      top: 22px; right: 28px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--faint);
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.25s;
+      padding: 8px;
+    }
+    #lb-close:hover { color: var(--ink); }
+
+    #lb-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      max-width: 92vw;
+    }
+    #lb-img {
+      max-width: 80vw;
+      max-height: 72vh;
+      object-fit: contain;
+      display: block;
+      border: 1px solid rgba(243,236,221,0.10);
+    }
+    #lb-prev, #lb-next {
+      font-family: var(--disp);
+      font-weight: 700;
+      font-size: 28px;
+      color: var(--faint);
+      padding: 14px 10px;
+      flex-shrink: 0;
+      transition: color 0.25s, transform 0.25s;
+    }
+    #lb-prev:hover { color: var(--ink); transform: translateX(-4px); }
+    #lb-next:hover { color: var(--ink); transform: translateX(4px); }
+
+    #lb-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(80vw, 900px);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    #lb-counter { color: var(--gold); }
+  </style>
+</head>
+<body class="page-act">
+
+  <!-- ── Texturas ─────────────────────────────────────────── -->
+  <div class="grain"></div>
+  <div class="vignette"></div>
+  <div class="rail l"></div>
+  <div class="rail r"></div>
+
+  <!-- ── Barra superior ────────────────────────────────────── -->
+  <header class="ep-topbar">
+    <a href="index.html" class="ep-back">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M5 12l7-7M5 12l7 7"/></svg>
+      Todos los episodios
+    </a>
+    <span class="ep-id">E · 02</span>
+  </header>
+
+  <!-- ── Hero ──────────────────────────────────────────────── -->
+  <section class="ep-hero">
+    <div class="ep-hero-bg">
+      <img src="img/actividad-02/modern-family.webp" alt="Modern Family — portada" style="position:absolute;inset:-10% 0;width:100%;height:120%;object-fit:cover">
+    </div>
+    <div class="ep-hero-scrim"></div>
+    <div class="ep-watermark">02</div>
+
+    <div class="wrap ep-hero-content">
+      <div class="ep-tags">
+        <span class="t gold">E · 02</span>
+      </div>
+      <h1>Lenguaje cinematográfico<br>y televisivo</h1>
+      <p class="ep-sub">Cómo un episodio se presenta a sí mismo</p>
+    </div>
+  </section>
+
+  <!-- ── Cuerpo ─────────────────────────────────────────────── -->
+  <div class="ep-body">
+    <div class="wrap">
+
+      <!-- SINOPSIS ─────────────────────────────────────────── -->
+      <div class="ep-section" data-reveal>
+        <p class="sec-label">Sinopsis</p>
+        <p class="synopsis">Una serie puede usar tanto lenguaje cinematográfico como televisivo</p>
+      </div>
+
+      <!-- SECCIÓN 1: FRIENDS ──────────────────────────────── -->
+      <div class="ep-section" data-reveal>
+        <p class="sec-label">Friends — T06 · E09</p>
+        <div class="series-block">
+          <div class="series-text analysis">
+            <p>
+              <span class="drop">L</span>a comedia situacional televisiva (sitcom) ha evolucionado a través de los recursos técnicos y visuales de los que se aprovecha. A continuación, vamos a comparar el modelo clásico heredado del formato televisivo con experimentaciones propias de narrativas digitales contemporáneas.
+            </p>
+            <p>
+              En primera instancia, podemos hablar de <em>Friends</em> (Temporada 6, Episodio 9: "The One Where Ross Got High"). Este episodio es un ejemplo arquetípico de la sitcom tradicional de estudio. Existe una puesta en escena más teatral y un modelo multi-cámara.
+            </p>
+            <p>
+              <em>Friends</em> se grababa con varias cámaras frente a un set con paredes físicas. Esto obliga a que los actores se desplacen horizontalmente —como en el teatro— para así evitar dar la espalda a la cámara.
+            </p>
+            <p>
+              Uno como espectador puede memorizar fácilmente el mapa mental del departamento. Sabemos dónde está la cocina, la sala y los pasillos. El atrezzo no cambia, lo que genera una sensación de familiaridad y confort. Quizá eso es algo que hace que sintamos las sitcoms como lugares seguros.
+            </p>
+            <p>
+              También contamos con una iluminación plana, brillante y prácticamente sin sombras. Se busca asegurar que las expresiones cómicas sean visibles desde cualquier ángulo de las múltiples cámaras activas simultáneamente.
+            </p>
+          </div>
+          <figure class="series-img">
+            <img src="img/actividad-02/friends.jpg" alt="Friends — T06 E09">
+            <figcaption>Friends · T06 E09 · NBC · 1999</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 2: MODERN FAMILY ────────────────────────── -->
+      <div class="ep-section" data-reveal>
+        <p class="sec-label">Modern Family — T06 · E16</p>
+        <div class="series-block reverse">
+          <div class="series-text analysis">
+            <p>
+              Por otro lado, podemos hablar sobre <em>Modern Family</em> (Temporada 6, Episodio 16: "Connection Lost"). Este episodio es notablemente un hito en el formato. Experimenta con un enfoque poco convencional al capturar todo el desarrollo de la trama a través de la grabación de la pantalla de una computadora.
+            </p>
+            <p>
+              La tradicional edición se sustituye por clics, abrir y cerrar pestañas, hacer varias cosas a la vez. La comedia no es solo dialógica; también aprovecha el uso de la tecnología que hace Claire: dudar al escribir mensajes, abrir Facebook en medio de una discusión, visitar tiendas en línea.
+            </p>
+            <p>
+              En lugar de utilizar planos cinematográficos al uso, el episodio utiliza las ventanas de la videollamada como primeros planos. La composición resulta caótica, replicando de alguna manera el desorden que constituye la mente moderna.
+            </p>
+            <p>
+              <em>Modern Family</em> ya de por sí es conocida por romper la cuarta pared. Pero este episodio se lleva al extremo: la cámara no forma parte de los instrumentos de rodaje, es la propia cámara web de la protagonista. El uso de recursos cómicos, en ese sentido, se abre en muchas direcciones.
+            </p>
+          </div>
+          <figure class="series-img">
+            <img src="img/actividad-02/modern-family.webp" alt="Modern Family — T06 E16">
+            <figcaption>Modern Family · T06 E16 · ABC · 2015</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- PULLQUOTE ────────────────────────────────────────── -->
+      <div class="ep-section" data-reveal>
+        <div class="analysis">
+          <p class="pullquote">
+            Cada formato posibilita una serie de recursos <span>que hay que saber aprovechar</span>.
+          </p>
+        </div>
+      </div>
+
+      <!-- FRAGMENTOS / GALERÍA ─────────────────────────────── -->
+      <div class="ep-section" data-reveal>
+        <p class="sec-label">Fragmentos</p>
+        <div class="gallery">
+          <div class="g-item" data-caption="Friends — T06 · E09">
+            <img src="img/actividad-02/friends.jpg" alt="Friends — T06 E09">
+          </div>
+          <div class="g-item" data-caption="Modern Family — T06 · E16">
+            <img src="img/actividad-02/modern-family.webp" alt="Modern Family — T06 E16">
+          </div>
+        </div>
+      </div>
+
+      <!-- FICHAS TÉCNICAS ──────────────────────────────────── -->
+      <div class="ep-section" data-reveal>
+        <p class="sec-label">Fichas técnicas</p>
+        <div class="fichas-grid">
+
+          <div>
+            <p class="ficha-serie-title">Friends</p>
+            <div class="ficha">
+              <div class="cell">
+                <div class="k">Serie</div>
+                <div class="v">Friends</div>
+              </div>
+              <div class="cell">
+                <div class="k">Temporada / Cap.</div>
+                <div class="v">T06 · E09</div>
+              </div>
+              <div class="cell">
+                <div class="k">Título del episodio</div>
+                <div class="v">The One Where Ross Got High</div>
+              </div>
+              <div class="cell">
+                <div class="k">Creadores</div>
+                <div class="v">David Crane & Marta Kauffman</div>
+              </div>
+              <div class="cell">
+                <div class="k">Dirección</div>
+                <div class="v">Gary Halvorson</div>
+              </div>
+              <div class="cell">
+                <div class="k">Cadena</div>
+                <div class="v">NBC</div>
+              </div>
+              <div class="cell">
+                <div class="k">Año</div>
+                <div class="v">1999</div>
+              </div>
+              <div class="cell">
+                <div class="k">Formato</div>
+                <div class="v">Multi-cámara · Estudio</div>
+              </div>
+              <div class="cell" style="grid-column:1/-1">
+                <div class="k">Reparto principal</div>
+                <div class="v" style="font-size:13px;font-family:var(--body);font-weight:400;letter-spacing:0.04em;line-height:1.9;text-transform:none">
+                  Jennifer Aniston · Courteney Cox · Lisa Kudrow<br>
+                  Matt LeBlanc · Matthew Perry · David Schwimmer
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <p class="ficha-serie-title">Modern Family</p>
+            <div class="ficha">
+              <div class="cell">
+                <div class="k">Serie</div>
+                <div class="v">Modern Family</div>
+              </div>
+              <div class="cell">
+                <div class="k">Temporada / Cap.</div>
+                <div class="v">T06 · E16</div>
+              </div>
+              <div class="cell">
+                <div class="k">Título del episodio</div>
+                <div class="v">Connection Lost</div>
+              </div>
+              <div class="cell">
+                <div class="k">Creadores</div>
+                <div class="v">Christopher Lloyd & Steven Levitan</div>
+              </div>
+              <div class="cell">
+                <div class="k">Dirección</div>
+                <div class="v">Beth McCarthy-Miller</div>
+              </div>
+              <div class="cell">
+                <div class="k">Cadena</div>
+                <div class="v">ABC</div>
+              </div>
+              <div class="cell">
+                <div class="k">Año</div>
+                <div class="v">2015</div>
+              </div>
+              <div class="cell">
+                <div class="k">Formato</div>
+                <div class="v">Screencast · Cámara web</div>
+              </div>
+              <div class="cell" style="grid-column:1/-1">
+                <div class="k">Reparto principal</div>
+                <div class="v" style="font-size:13px;font-family:var(--body);font-weight:400;letter-spacing:0.04em;line-height:1.9;text-transform:none">
+                  Ed O'Neill · Sofía Vergara · Julie Bowen<br>
+                  Ty Burrell · Jesse Tyler Ferguson · Eric Stonestreet
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CONCLUSIÓN ───────────────────────────────────────── -->
+      <div class="ep-section" data-reveal>
+        <p class="sec-label">Conclusión</p>
+        <p style="color:var(--muted);font-size:17px;line-height:1.85;max-width:640px">
+          Ambas series demuestran que el lenguaje televisivo y el cinematográfico no son opuestos, sino registros distintos con sus propias reglas. <em>Friends</em> domina el espacio del estudio con una teatralidad cuidadosamente construida; <em>Modern Family</em> subvierte todos esos códigos para hacer de la pantalla misma el escenario. Lo que importa no es el formato elegido, sino la coherencia con la que se explota.
+        </p>
+      </div>
+
+      <!-- NAVEGACIÓN ANTERIOR ─────────────────────────────── -->
+      <a href="actividad-01.html" class="ep-next" data-reveal>
+        <div>
+          <p class="nx-label">Actividad anterior</p>
+          <p class="nx-title">Inicio de las series</p>
+        </div>
+        <span class="nx-arrow">←</span>
+      </a>
+
+      <!-- PIE DE PÁGINA ────────────────────────────────────── -->
+      <footer class="act-foot">
+        <span>Series Audiovisuales © 2026 — Alexander Oliva</span>
+        <a href="index.html">← Volver al índice</a>
+      </footer>
+
+    </div><!-- /.wrap -->
+  </div><!-- /.ep-body -->
+
+  <!-- Lightbox -->
+  <div id="lightbox" hidden aria-hidden="true">
+    <button id="lb-close" aria-label="Cerrar">✕ &nbsp;cerrar</button>
+    <div id="lb-content">
+      <button id="lb-prev" aria-label="Anterior">←</button>
+      <img id="lb-img" src="" alt="">
+      <button id="lb-next" aria-label="Siguiente">→</button>
+    </div>
+    <footer id="lb-footer">
+      <span id="lb-caption"></span>
+      <span id="lb-counter"></span>
+    </footer>
+  </div>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('[data-reveal]').forEach(el => obs.observe(el));
+
+    /* ── Lightbox ── */
+    const lb      = document.getElementById('lightbox');
+    const lbImg   = document.getElementById('lb-img');
+    const lbCap   = document.getElementById('lb-caption');
+    const lbCount = document.getElementById('lb-counter');
+    const lbPrev  = document.getElementById('lb-prev');
+    const lbNext  = document.getElementById('lb-next');
+
+    const lbItems = [];
+    let lbIdx = 0;
+
+    document.querySelectorAll('.g-item img').forEach((img, i) => {
+      lbItems.push({ src: img.src, alt: img.alt, caption: img.closest('.g-item').dataset.caption || '' });
+      img.closest('.g-item').addEventListener('click', () => openLightbox(i));
+    });
+
+    function syncUI() {
+      const item = lbItems[lbIdx];
+      lbImg.src      = item.src;
+      lbImg.alt      = item.alt;
+      lbCap.textContent   = item.caption;
+      lbCount.textContent = (lbIdx + 1) + ' / ' + lbItems.length;
+      lbPrev.style.opacity      = lbIdx === 0 ? '0.2' : '1';
+      lbNext.style.opacity      = lbIdx === lbItems.length - 1 ? '0.2' : '1';
+      lbPrev.style.pointerEvents = lbIdx === 0 ? 'none' : 'auto';
+      lbNext.style.pointerEvents = lbIdx === lbItems.length - 1 ? 'none' : 'auto';
+    }
+
+    function openLightbox(i) {
+      lbIdx = i;
+      syncUI();
+      lb.hidden = false;
+      lb.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      gsap.fromTo(lb,    { opacity: 0 },               { opacity: 1, duration: 0.3,  ease: 'power2.out' });
+      gsap.fromTo(lbImg, { scale: 0.88, opacity: 0 },  { scale: 1,   opacity: 1, duration: 0.5, ease: 'power3.out', delay: 0.05 });
+    }
+
+    function closeLightbox() {
+      gsap.to(lbImg, { scale: 0.9, opacity: 0, duration: 0.22, ease: 'power2.in' });
+      gsap.to(lb, {
+        opacity: 0, duration: 0.3, ease: 'power2.in', delay: 0.08,
+        onComplete() {
+          lb.hidden = true;
+          lb.setAttribute('aria-hidden', 'true');
+          lbImg.src = '';
+          document.body.style.overflow = '';
+        }
+      });
+    }
+
+    function navigate(dir) {
+      const next = lbIdx + dir;
+      if (next < 0 || next >= lbItems.length) return;
+      const fromX = dir > 0 ? -55 : 55;
+      const toX   = dir > 0 ?  55 : -55;
+      gsap.to(lbImg, {
+        x: fromX, opacity: 0, duration: 0.18, ease: 'power2.in',
+        onComplete() {
+          lbIdx = next;
+          syncUI();
+          gsap.fromTo(lbImg, { x: toX, opacity: 0 }, { x: 0, opacity: 1, duration: 0.28, ease: 'power2.out' });
+        }
+      });
+    }
+
+    document.getElementById('lb-close').addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', () => navigate(-1));
+    lbNext.addEventListener('click', () => navigate(1));
+    lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+      if (lb.hidden) return;
+      if (e.key === 'Escape')      closeLightbox();
+      if (e.key === 'ArrowLeft')   navigate(-1);
+      if (e.key === 'ArrowRight')  navigate(1);
+    });
+  </script>
+
+</body>
+</html>
