@@ -58,48 +58,52 @@ window.EPISODIOS = [
   {
     id: "e03",
     no: "03",
+    href: "actividad-03.html",
+    thumb: "img/actividad-03/this-is-us.webp",
     tipo: "Análisis",
-    titulo: "Tiempo y Montaje Serial",
-    logline: "Elipsis, flashbacks y temporadas como capítulos: cómo la serialidad reescribe nuestra percepción del tiempo.",
-    sub: "El tiempo es el verdadero protagonista.",
+    titulo: "El Color del Duelo",
+    logline: "Cómo This Is Us usa el contraste cromático, el humo y los primeros planos para materializar el trauma y el duelo a lo largo del tiempo.",
+    sub: "La imagen como extensión del guion.",
     semana: "Semana 06",
     duracion: "Lectura 7 min",
     ficha: {
-      "Serie analizada": "[ Título ]",
-      "Recurso": "Elipsis / Flashback",
-      "Dirección": "[ Director ]",
-      "Año": "[ 20— ]"
+      "Serie analizada": "This Is Us",
+      "Temporada / Cap.": "T02 · E14",
+      "Dirección": "Ken Olin",
+      "Año": "2018"
     },
-    sinopsis: "La serie no dura horas: dura años de nuestra vida. Aquí analizo cómo el montaje administra ese tiempo prolongado.",
+    sinopsis: "La fotografía y el diseño de producción como extensiones del guion: así This Is Us traduce el trauma en imagen.",
     analisis: [
-      "Desarrolla cómo la serie manipula el tiempo narrativo: saltos temporales, líneas paralelas, repeticiones. Explica qué efecto produce cada recurso en el espectador y cómo el montaje sostiene la coherencia a lo largo de múltiples capítulos.",
-      "Profundiza en la relación entre tiempo de la historia y tiempo del relato. ¿Cómo aprovecha la serialidad la espera entre episodios? Relaciona el montaje interno de la escena con la estructura macro de la temporada."
+      "El episodio se caracteriza por utilizar contraste cromático, densidad atmosférica y un uso de planos que materializan el trauma del pasado y el procesamiento del duelo en el presente.",
+      "En la narrativa audiovisual, el uso del color invierte los significados tradicionales asociados al ideal de hogar. Los tonos fríos dominan las zonas que deberían ser seguras, mientras que los cálidos del incendio se sobreexponen hasta volverse amenazantes."
     ],
-    quote: "En televisión, esperar entre capítulos también es <span>montaje</span>.",
-    conclusion: "Concluye con tu hallazgo sobre cómo la serialidad transforma el tiempo en herramienta dramática."
+    quote: "El fuego no solo destruye la casa; <span>redefine a la familia</span>.",
+    conclusion: "La fotografía y el diseño de producción se vuelven extensiones del propio guion. El contraste entre el tono pesadillesco y la intimidad nostálgica del presente encapsula la idea de que el amor y el dolor están profundamente vinculados."
   },
   {
     id: "e04",
     no: "04",
-    tipo: "Ensayo",
-    titulo: "La Sobremesa del Streaming",
-    logline: "Del prime time al maratón nocturno: cómo el modo de ver cambió la forma de escribir.",
-    sub: "Ver distinto obliga a escribir distinto.",
+    href: "actividad-04.html",
+    thumb: "img/actividad-04/malcolm-in-the-middle.jpg",
+    tipo: "Análisis",
+    titulo: "Retratos de Familia",
+    logline: "Malcolm, Bluey, Arrested Development y Married with Children: cuatro retratos de una misma institución social.",
+    sub: "Autoridad, apego, herencia, alienación.",
     semana: "Semana 09",
     duracion: "Lectura 8 min",
     ficha: {
-      "Tema": "Hábitos de consumo",
-      "Formato": "Ensayo",
-      "Fuentes": "[ Citas ]",
+      "Series analizadas": "Malcolm / Bluey / Arrested / MwC",
+      "Episodios": "T02·E20 / T02·E09 / T01·E10 / T01·E01",
+      "Enfoque": "Análisis comparativo",
       "Año": "2026"
     },
-    sinopsis: "El binge-watching no solo cambió cómo vemos: rediseñó cómo se escriben los finales de capítulo.",
+    sinopsis: "Malcolm, Bluey, Arrested Development y Married with Children como espejos de cuatro dimensiones de la institución familiar.",
     analisis: [
-      "Plantea tu tesis sobre el consumo en plataformas. Compara la lógica del episodio semanal con la del estreno por temporada completa, y argumenta cómo cada modelo condiciona la escritura del cliffhanger, el ritmo y la densidad de información.",
-      "Sostén tu argumento con ejemplos y, si corresponde, con fuentes citadas. Reflexiona sobre lo que ganamos y perdemos como espectadores cuando el control del tiempo pasa del canal a nuestras manos."
+      "Cuatro series, cuatro dimensiones: la autoridad y el caos permisivo de Malcolm; el apego seguro y la individualización en Bluey; la herencia tóxica generacional en Arrested Development; y la alienación sociopolítica en Married with Children.",
+      "El medio audiovisual funciona como un espejo de la institución familiar. Ya sea a través del poder, el apego, las herencias o la alienación económica, cada serie trasciende el entretenimiento y se convierte en un punto de análisis de la condición humana."
     ],
-    quote: "Cuando todo está disponible, el <span>deseo</span> se convierte en guion.",
-    conclusion: "Cierra el ensayo con una postura clara sobre el futuro del relato serial."
+    quote: "La familia no es un retrato fijo: es un <span>ecosistema reactivo</span>.",
+    conclusion: "Estudiar la familia en los audiovisuales es explorar un componente fundamental de nuestra propia estructura social."
   },
   {
     id: "e05",
